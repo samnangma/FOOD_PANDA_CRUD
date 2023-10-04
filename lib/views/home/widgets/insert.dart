@@ -12,6 +12,7 @@ class RestaurantForm extends StatefulWidget {
 
 class _RestaurantFormState extends State<RestaurantForm> {
   final _formKey = GlobalKey<FormState>();
+  
   TextEditingController nameController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController discountController = TextEditingController();

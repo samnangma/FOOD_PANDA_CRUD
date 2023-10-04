@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodpanda_ui_clone/views/deitialspage/product_detials.dart';
@@ -8,7 +7,6 @@ import 'package:foodpanda_ui_clone/views/home/widgets/mydrawer_cus.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/near_food_restaurant.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/slidercardone.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/slidercardtwoandthree.dart';
-import 'package:foodpanda_ui_clone/views/home/widgets/popular_restaurant.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/top_restaurant.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/voucher.dart';
 import 'package:foodpanda_ui_clone/views/order_page/cart.dart';
@@ -93,15 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetailsPage()),
-                        );
-                      },
-                      child: TopRestaurant());
+                  return 
+                       TopRestaurant();
                 }),
           )),
           const SliverToBoxAdapter(

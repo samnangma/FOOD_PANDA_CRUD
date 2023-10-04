@@ -42,6 +42,7 @@ dependencies:
   http:
   image_picker:
   confirm_dialog:
+  form_validator: ^2.1.1
 
 dev_dependencies:
   flutter_test:

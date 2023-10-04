@@ -1,6 +1,7 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:foodpanda_ui_clone/get_model.dart';
+import 'package:foodpanda_ui_clone/views/deitialspage/product_detials.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/insert.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/update.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +17,7 @@ class TopRestaurant extends StatefulWidget {
 
 class _TopRestaurantState extends State<TopRestaurant> {
   late Future<RestaurantModel> futureRestaurant;
-  
+
   Future<RestaurantModel> fetchRestaurantData() async {
     final response = await http.get(Uri.parse(
         'https://cms.istad.co/api/food-panda-restaurants?populate=*'));
@@ -72,85 +73,147 @@ class _TopRestaurantState extends State<TopRestaurant> {
               final item = snapshot.data!.data![index].attributes;
               final idpass = snapshot.data!.data![index].id?.toInt();
 
-              return Container(
-                height: 800,
-                width: 300,
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.black12,
+              return GestureDetector(
+                // onTap: () {
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => ProductDetailsPage()),
+                //   );
+                // },
+              
+                  // showModalBottomSheet(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: IconButton(
+                  //               onPressed: () {
+                  //                 Navigator.push(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                       builder: (context) => RestaurantForm()),
+                  //                 );
+                  //               },
+                  //               icon: const Icon(Icons.add),
+                  //             ),
+                  //           ),
+                  //           Expanded(
+                  //             child: IconButton(
+                  //               onPressed: () async {
+                  //                 if (await confirm(context)) {
+                  //                   return deleteRestaurant(idpass!);
+                  //                 }
+                  //               },
+                  //               icon: const Icon(Icons.close),
+                  //             ),
+                  //           ),
+                  //           Expanded(
+                  //             child: IconButton(
+                  //               onPressed: () {
+                  //                 Navigator.push(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                       builder: (context) =>
+                  //                           UpdateRestaurantForm(idpass!)),
+                  //                 );
+                  //               },
+                  //               icon: const Icon(Icons.edit),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       );
+                  //     });
+                 
+                        onLongPress: (){
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children:[
+                  ListTile(
+                    leading:  Icon(Icons.add_circle_outline_outlined,size: 30),
+                    title:  Text('Insert',style: TextStyle(fontSize: 22),),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  RestaurantForm()));
+                    },
                   ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity * .7,
-                        child: Image.network(
-                          'https://cms.istad.co${item?.picture?.data?.attributes?.url}',
-                          height: 200,
-                          fit: BoxFit.cover,
+                  ListTile(
+                    leading:  Icon(Icons.remove_circle_outline_outlined,size: 30),
+                    title: Text('Delete'),
+                    onTap: ()async {
+                      if (await confirm(context)) {
+                        print("hi");
+                        return;
+                        // return deleteRestaurant(widget.idpass!);
+                      }
+                    },
+                  ),
+                  ListTile(
+                    leading:  Icon(Icons.draw_outlined,size: 30,),
+                    title:  Text('Update'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UpdateRestaurantForm((idpass) as int,)));
+                    },
+                  ),
+                ],
+              );
+            });
+      }, 
+                      
+                    
+                
+                child: Container(
+                  height: 800,
+                  width: 300,
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.black12,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity * .7,
+                          child: Image.network(
+                            'https://cms.istad.co${item?.picture?.data?.attributes?.url}',
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("${item?.name}"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Category: ${item?.category}"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("${item?.createdAt}"),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => RestaurantForm()),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                              ),
-                              Expanded(
-                                child: IconButton(
-                                  onPressed: () async {
-                                    if (await confirm(context)) {
-                                      return deleteRestaurant(idpass!);
-                                    }
-                                  },
-                                  icon: const Icon(Icons.close),
-                                ),
-                              ),
-                              Expanded(
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              UpdateRestaurantForm(idpass!)),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("${item?.name}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Category: ${item?.category}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("${item?.createdAt}"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -164,6 +227,3 @@ class _TopRestaurantState extends State<TopRestaurant> {
     );
   }
 }
-
-
-
