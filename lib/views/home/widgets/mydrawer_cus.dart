@@ -10,6 +10,7 @@ class MyDrawerCus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+        
         width: MediaQuery.of(context).size.width * .85,
         child: ListView(
           children: [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodpanda_ui_clone/views/home/homescreen.dart';
+import 'package:foodpanda_ui_clone/views/splash_screen/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }

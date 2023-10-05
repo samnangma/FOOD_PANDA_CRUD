@@ -72,147 +72,187 @@ class _TopRestaurantState extends State<TopRestaurant> {
             itemBuilder: (BuildContext context, int index) {
               final item = snapshot.data!.data![index].attributes;
               final idpass = snapshot.data!.data![index].id?.toInt();
+              final imgid =
+                  snapshot.data!.data![index].attributes?.picture?.data?.id;
 
               return GestureDetector(
-                // onTap: () {
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => ProductDetailsPage()),
-                //   );
-                // },
-              
-                  // showModalBottomSheet(
-                  //     context: context,
-                  //     builder: (context) {
-                  //       return Row(
-                  //         children: [
-                  //           Expanded(
-                  //             child: IconButton(
-                  //               onPressed: () {
-                  //                 Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                       builder: (context) => RestaurantForm()),
-                  //                 );
-                  //               },
-                  //               icon: const Icon(Icons.add),
-                  //             ),
-                  //           ),
-                  //           Expanded(
-                  //             child: IconButton(
-                  //               onPressed: () async {
-                  //                 if (await confirm(context)) {
-                  //                   return deleteRestaurant(idpass!);
-                  //                 }
-                  //               },
-                  //               icon: const Icon(Icons.close),
-                  //             ),
-                  //           ),
-                  //           Expanded(
-                  //             child: IconButton(
-                  //               onPressed: () {
-                  //                 Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                       builder: (context) =>
-                  //                           UpdateRestaurantForm(idpass!)),
-                  //                 );
-                  //               },
-                  //               icon: const Icon(Icons.edit),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       );
-                  //     });
-                 
-                        onLongPress: (){
-        showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children:[
-                  ListTile(
-                    leading:  Icon(Icons.add_circle_outline_outlined,size: 30),
-                    title:  Text('Insert',style: TextStyle(fontSize: 22),),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  RestaurantForm()));
-                    },
-                  ),
-                  ListTile(
-                    leading:  Icon(Icons.remove_circle_outline_outlined,size: 30),
-                    title: Text('Delete'),
-                    onTap: ()async {
-                      if (await confirm(context)) {
-                        print("hi");
-                        return;
-                        // return deleteRestaurant(widget.idpass!);
-                      }
-                    },
-                  ),
-                  ListTile(
-                    leading:  Icon(Icons.draw_outlined,size: 30,),
-                    title:  Text('Update'),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  UpdateRestaurantForm((idpass) as int,)));
-                    },
-                  ),
-                ],
-              );
-            });
-      }, 
-                      
-                    
-                
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductDetailsPage()));
+                },
+                onLongPress: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: const Icon(
+                                  Icons.add_circle_outline_outlined,
+                                  size: 30),
+                              title: const Text(
+                                'Insert',
+                                style: TextStyle(fontSize: 22),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            RestaurantForm()));
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(
+                                  Icons.remove_circle_outline_outlined,
+                                  size: 30),
+                              title: const Text('Delete'),
+                              onTap: () async {
+                                if (await confirm(context)) {
+                                  await deleteRestaurant(idpass!);
+                                  setState(() {
+                                    // Reload the data
+                                    futureRestaurant = fetchRestaurantData();
+                                  });
+                                }
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.draw_outlined,
+                                size: 30,
+                              ),
+                              title: const Text('Update'),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            UpdateRestaurantForm(
+                                                item: item,
+                                                idpass: idpass,
+                                                imgid: imgid, onDataReload: () {  },)));
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                },
                 child: Container(
-                  height: 800,
-                  width: 300,
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
                   alignment: Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12,
+                      color: Colors.grey.shade200,
                     ),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: double.infinity * .7,
-                          child: Image.network(
-                            'https://cms.istad.co${item?.picture?.data?.attributes?.url}',
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * .9,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("${item?.name}"),
+                            SizedBox(
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    width: double.maxFinite,
+                                    height: 200,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.network(
+                                        'https://cms.istad.co${item?.picture?.data?.attributes?.url}',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 10,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(50),
+                                          bottomRight: Radius.circular(50),
+                                        ),
+                                        color: Colors.pink.shade600,
+                                      ),
+                                      padding: const EdgeInsets.all(10),
+                                      child: const Text(
+                                        "Top restaurant",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 10,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: Colors.white,
+                                      ),
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(
+                                        "${item?.deliveryTime} mn",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Category: ${item?.category}"),
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                "${item?.name}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 3,
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("${item?.createdAt}"),
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                "\$\$\$ ${item?.category}",
+                                style: const TextStyle(fontSize: 16),
+                                maxLines: 1,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                "\$ ${item?.deliveryFee.toString()} delivery fee",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

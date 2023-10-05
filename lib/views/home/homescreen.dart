@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:foodpanda_ui_clone/views/deitialspage/product_detials.dart';
+import 'package:foodpanda_ui_clone/views/home/model/cuisines.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/banner_cusqppbar.dart';
+import 'package:foodpanda_ui_clone/views/home/widgets/cuisine.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/display_food.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/mydrawer_cus.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/near_food_restaurant.dart';
@@ -10,6 +11,7 @@ import 'package:foodpanda_ui_clone/views/home/widgets/slidercardtwoandthree.dart
 import 'package:foodpanda_ui_clone/views/home/widgets/top_restaurant.dart';
 import 'package:foodpanda_ui_clone/views/home/widgets/voucher.dart';
 import 'package:foodpanda_ui_clone/views/order_page/cart.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +20,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Future<CuisinesModel> futureCuisines;
+  Future<CuisinesModel> fetchCuisines() async {
+    final res = await http.get(
+        Uri.parse('https://cms.istad.co/api/food-panda-cuisines?populate=%2A'));
+    if (res.statusCode == 200) {
+      return cuisinesModelFromJson(res.body);
+    } else {
+      throw Exception("Failed to fetch Cuisines");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    futureCuisines = fetchCuisines();
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -86,16 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SliverToBoxAdapter(
               child: SizedBox(
-            height: 380,
+            height: 330,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return 
-                       TopRestaurant();
+                  return TopRestaurant();
                 }),
           )),
-          const SliverToBoxAdapter(
+         const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -106,15 +125,43 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 350,
-              child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10, // show how many items you want
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return const GridFood();
-                  }),
+              height: 340,
+              child: FutureBuilder<CuisinesModel>(
+                future: futureCuisines,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return GridView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data!.data!.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                        itemBuilder: (context, index) {
+                          final item = snapshot.data!.data![index].attributes;
+                          final url = snapshot.data!.data![index].attributes
+                              ?.thumbnail?.data?.attributes?.url;
+                          return Cuisines(items: item, uri: url);
+                        });
+                  }
+                  return const Center(
+                    child: Text('No data available.'),
+                  );
+                },
+              ),
             ),
           ),
           const SliverToBoxAdapter(
