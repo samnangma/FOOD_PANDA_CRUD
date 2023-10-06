@@ -153,7 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 340,
+                height: 370,
+    
                 child: FutureBuilder<CuisinesModel>(
                   future: futureCuisines,
                   builder: (context, snapshot) {

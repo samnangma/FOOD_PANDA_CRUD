@@ -128,7 +128,7 @@ class _RestaurantFormState extends State<RestaurantForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Restaurant Form'),
+        title: const Text('Insert Restaurant '),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

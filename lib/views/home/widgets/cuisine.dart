@@ -19,7 +19,8 @@ class _CuisinesState extends State<Cuisines> {
     return Column(
       children: [
         Container(
-          height: 130,
+          height: 150,
+          width: 120,
           decoration:BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: Colors.grey[100]

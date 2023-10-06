@@ -161,78 +161,140 @@ class _UpdateRestaurantForm extends State<UpdateRestaurantForm> {
     super.dispose();
   }
 
-  @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("Update Restaurant"),
-      content: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Update Items'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: submitForm,
+            child: Text('Update'),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                controller: nameController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Name',
+              SizedBox(
+                height: 30,
+              ),
+              Center(
+                child: SizedBox(
+                  width: 400,
+                  // Adjust the width as desired
+                  child: TextFormField(
+                    controller: nameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a name';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    ),
+                  ),
                 ),
               ),
-              TextFormField(
-                controller: categoryController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a category';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Category',
+              SizedBox(height: 25),
+              Center(
+                child: SizedBox(
+                  width: 400,
+                  child: TextFormField(
+                    controller: categoryController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a category';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Category',
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    ),
+                  ),
                 ),
               ),
-              TextFormField(
-                controller: discountController,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a discount';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Discount',
+              SizedBox(height: 25),
+              Center(
+                child: SizedBox(
+                  width: 400,
+                  child: TextFormField(
+                    controller: discountController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a discount';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Discount',
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    ),
+                  ),
                 ),
               ),
-              TextFormField(
-                controller: deliveryFeeController,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a delivery fee';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Delivery Fee',
+              SizedBox(height: 25),
+              Center(
+                child: SizedBox(
+                  width: 400,
+                  child: TextFormField(
+                    controller: deliveryFeeController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a delivery fee';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Delivery Fee',
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    ),
+                  ),
                 ),
               ),
-              TextFormField(
-                controller: deliveryTimeController,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a delivery time';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Delivery Time',
+              SizedBox(height: 25),
+              Center(
+                child: SizedBox(
+                  width: 400,
+                  child: TextFormField(
+                    controller: deliveryTimeController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a delivery time';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Delivery Time',
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    ),
+                  ),
                 ),
               ),
+              SizedBox(height: 25),
               ElevatedButton(
                 onPressed: () {
                   _pickImage(ImageSource.gallery);
@@ -245,18 +307,6 @@ class _UpdateRestaurantForm extends State<UpdateRestaurantForm> {
           ),
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: submitForm,
-          child: Text('Update'),
-        ),
-      ],
     );
   }
 }
